@@ -25,7 +25,7 @@ namespace ProyectoBase
             LimpiarCampos();
             cmbEstado.Items.Add("Suscripto");
             cmbEstado.Items.Add("No suscripto");
-           
+
         }
         private void button5_Click(object sender, EventArgs e)
         {
@@ -45,6 +45,7 @@ namespace ProyectoBase
             bool tieneDireccion = false;
             bool tieneEmail = false;
             bool tieneTelefono = false;
+            bool existeengrilla = false;
 
             if (txtNombre.Text.Equals(" "))
             {
@@ -90,14 +91,21 @@ namespace ProyectoBase
             {
                 tieneTelefono = true;
             }
-            if (tieneNombre && tieneApellido && tieneDireccion && tieneEmail && tieneTelefono)
+
+            existeengrilla = ExisteEnGrilla(nombre);
+            if (existeengrilla == true)
+            {
+                MessageBox.Show("Suscriptor registrado con anterioridad en el sistema");
+            }
+
+            if (tieneNombre && tieneApellido && tieneDireccion && tieneEmail && tieneTelefono && existeengrilla == false)
             {
 
                 Suscriptor sus = new Suscriptor(nombre, apellido, direccion, email, telefono);
 
                 AgregarSuscriptor(sus);
             }
-         }
+        }
 
         private void AgregarSuscriptor(Suscriptor sus)
         {
@@ -137,6 +145,19 @@ namespace ProyectoBase
             txtUser.Text = "";
             txtPassword.Text = "";
         }
+        private bool ExisteEnGrilla(string criterioABuscar)
+        {
+            bool resultado = false;
+
+            for (int i = 0; i< grdSuscriptor.Rows.Count; i++){
+            if (grdSuscriptor.Rows[i].Cells["Nombre"].Value.Equals(criterioABuscar)){  
+            resultado = true; 
+             break; 
+                }
+             }
+         return resultado; 
+        }
+
     }
 
 }
